@@ -1,11 +1,11 @@
 defmodule LazyOvermind.Router do
-  alias LazyOvermind.Controllers.Tick
+  alias LazyOvermind.Controllers.{Callback, Keyboard, Tick}
 
   def update(model, msg) do
     case msg do
-      {:callback, {:status, list}} -> %{model | status: %{list: list}}
-
-      :tick -> Tick.update(model, msg)
+      {:event, payload} -> Keyboard.update(model, payload)
+      {:callback, payload} -> Callback.update(model, payload)
+      :tick -> Tick.update(model, nil)
       _ -> msg
     end
   end

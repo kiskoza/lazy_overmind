@@ -11,7 +11,8 @@ defmodule LazyOvermind.App do
     %{
       socket: ".overmind.sock",
       status: %{
-        list: nil
+        list: nil,
+        position: 0
       }
     }
   end
