@@ -1,6 +1,14 @@
 defmodule LazyOvermind.Controllers.Callback do
-  def update(%{status: status} = model, {:status, list} = _payload) do
-    %{model | status: %{status | list: list}}
+  alias LazyOvermind.Utils.Panel
+
+  def update(%{status: %{size: size} = status, window: window_size} = model, {:status, list} = _payload) do
+    %{model |
+      status: %{status |
+                list: list,
+                size: %{size |
+                        height: Panel.max_height(list, window_size)}
+              }
+    }
   end
 
   def update(model, {:start, _process} = _payload) do

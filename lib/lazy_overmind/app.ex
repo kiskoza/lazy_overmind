@@ -7,13 +7,17 @@ defmodule LazyOvermind.App do
   alias LazyOvermind.Views.Window
 
   @impl true
-  def init(_context) do
+  def init(%{window: window} = _context) do
     %{
       socket: ".overmind.sock",
       status: %{
         list: nil,
-        position: 0
-      }
+        position: 0,
+        size: %{
+          height: 5
+        }
+      },
+      window: window
     }
   end
 
