@@ -1,4 +1,4 @@
-defmodule LazyOvermind.Views.StatusPanel do
+defmodule LazyOvermind.Views.ProjectsPanel do
   import Ratatouille.View
   import Ratatouille.Constants, only: [color: 1]
 
@@ -9,12 +9,12 @@ defmodule LazyOvermind.Views.StatusPanel do
     background: color(:white)
   ]
 
-  def render(%{status: status, size: %{height: height} = _size} = _project, _model) do
-    panel title: "Status",
+  def render(%{window: %{height: height} = _window, projects: projects} = _model) do
+    panel title: "Projects",
           height: height do
-      case status do
+      case projects do
         %{list: nil} ->
-          label(content: "Loading...")
+          label(content: "No project found.")
         %{list: list, position: position} ->
           offset = Panel.offset(list, height - 4, position)
 
@@ -22,10 +22,9 @@ defmodule LazyOvermind.Views.StatusPanel do
             list
             |> Enum.drop(offset)
             |> Enum.with_index(offset)
-            |> Enum.map(fn {[process, _pid, status | _], index} ->
+            |> Enum.map(fn {%{name: name}, index} ->
               table_row(if(index == position, do: @style_selected, else: [])) do
-                table_cell(content: process)
-                table_cell(content: status)
+                table_cell(content: name)
               end
             end)
           end

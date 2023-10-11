@@ -1,13 +1,21 @@
 defmodule LazyOvermind.Controllers.Callback do
   alias LazyOvermind.Utils.Panel
 
-  def update(%{status: %{size: size} = status, window: window_size} = model, {:status, list} = _payload) do
+  def update(%{projects: %{list: project_list} = projects, window: window_size} = model, {:status, {socket, list}} = _payload) do
     %{model |
-      status: %{status |
-                list: list,
-                size: %{size |
-                        height: Panel.max_height(list, window_size)}
-              }
+      projects: %{ projects |
+                   list: project_list
+                   |> Enum.map(fn project ->
+                     case project do
+                       %{socket: ^socket, status: status, size: size} ->
+                         %{ project |
+                            status: %{ status | list: list},
+                            size: %{size | height: Panel.max_height(list, window_size)}
+                          }
+                       _ -> project
+                     end
+                   end)
+                }
     }
   end
 

@@ -3,7 +3,7 @@ defmodule LazyOvermind.Commands.Stop do
 
   alias LazyOvermind.Overmind
 
-  def command(%{socket: socket, status: %{position: position, list: list} = _status} = _model) do
+  def command(%{socket: socket, status: %{list: list, position: position}} = _project, _model) do
     [process | _] = Enum.at(list, position)
 
     Command.new(fn ->

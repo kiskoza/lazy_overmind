@@ -5,11 +5,14 @@ defmodule LazyOvermind.Overmind do
   end
 
   def status(socket) do
-    overmind(socket, ["status"])
-    |> String.trim()
-    |> String.split("\n")
-    |> Enum.drop(1)
-    |> Enum.map(&String.split/1)
+    {
+      socket,
+      overmind(socket, ["status"])
+        |> String.trim()
+        |> String.split("\n")
+        |> Enum.drop(1)
+        |> Enum.map(&String.split/1)
+    }
   end
 
   def stop(socket, process) do

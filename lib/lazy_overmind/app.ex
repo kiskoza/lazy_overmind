@@ -9,13 +9,22 @@ defmodule LazyOvermind.App do
   @impl true
   def init(%{window: window} = _context) do
     %{
-      socket: ".overmind.sock",
-      status: %{
-        list: nil,
-        position: 0,
-        size: %{
-          height: 5
-        }
+      projects: %{
+        list: [
+          %{
+            name: "Test Project",
+            active: true,
+            socket: ".overmind.sock",
+            status: %{
+              list: nil,
+              position: 0,
+            },
+            size: %{
+              height: 5
+            }
+          }
+        ],
+        position: 0
       },
       window: window
     }
