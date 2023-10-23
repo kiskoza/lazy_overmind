@@ -1,7 +1,7 @@
 defmodule LazyOvermind.Controllers.Keyboard do
   import Ratatouille.Constants, only: [key: 1]
 
-  alias LazyOvermind.Commands.{Start, Stop}
+  alias LazyOvermind.Commands.{Connect, Start, Stop}
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
@@ -25,6 +25,11 @@ defmodule LazyOvermind.Controllers.Keyboard do
                    end)
                 }
     }
+  end
+
+  def update(%{projects: %{list: list, position: position} = _projects } = model, %{ch: ch} = _payload)
+  when ch == ?c or ch == ?C do
+    {model, Connect.command(Enum.at(list, position), model)}
   end
 
   def update(%{projects: %{list: list, position: position} = _projects } = model, %{ch: ch} = _payload)
