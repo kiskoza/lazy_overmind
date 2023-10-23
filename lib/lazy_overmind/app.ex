@@ -5,30 +5,19 @@ defmodule LazyOvermind.App do
 
   alias LazyOvermind.Router
   alias LazyOvermind.Views.Window
+  alias LazyOvermind.Utils.Config
 
   @impl true
   def init(%{window: window} = _context) do
     %{
       panel: :projects,
       projects: %{
-        list: [
-          %{
-            name: "Test Project",
-            active: true,
-            socket: ".overmind.sock",
-            status: %{
-              list: nil,
-              position: 0,
-            },
-            size: %{
-              height: 5
-            }
-          }
-        ],
+        list: [],
         position: 0
-      },
+        },
       window: window
     }
+    |> Map.merge(Config.read_json(Config.config_file_path), &Config.resolve_merge/3)
   end
 
   @impl true

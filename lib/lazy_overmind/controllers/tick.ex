@@ -7,8 +7,10 @@ defmodule LazyOvermind.Controllers.Tick do
     commands = list
     |> Enum.filter(fn %{visibility: visibility} = _project -> visibility != :hidden end)
     |> Enum.map(fn project -> Status.command(project, model) end)
-    |> Command.batch()
 
-    {model, commands}
+    case commands do
+      [] -> model
+      _ -> {model, Command.batch(commands) }
+    end
   end
 end

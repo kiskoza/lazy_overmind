@@ -20,7 +20,8 @@ defmodule LazyOvermind.MixProject do
 
   defp deps do
     [
-      {:ratatouille, github: "ndreynolds/ratatouille"}
+      {:jason, "~> 1.4"},
+      {:ratatouille, "~> 0.5.1"}
     ]
   end
 end
