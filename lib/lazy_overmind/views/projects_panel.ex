@@ -1,15 +1,9 @@
 defmodule LazyOvermind.Views.ProjectsPanel do
   import Ratatouille.View
-  import Ratatouille.Constants, only: [color: 1]
 
-  alias LazyOvermind.Utils.Panel
+  alias LazyOvermind.Utils.{Colors, Panel}
 
-  @style_selected [
-    color: color(:black),
-    background: color(:white)
-  ]
-
-  def render(%{window: %{height: height} = _window, projects: projects} = _model) do
+  def render(%{window: %{height: height} = _window, projects: projects, panel: panel} = _model) do
     panel title: "Projects",
           height: height do
       case projects do
@@ -17,13 +11,14 @@ defmodule LazyOvermind.Views.ProjectsPanel do
           label(content: "No project found.")
         %{list: list, position: position} ->
           offset = Panel.offset(list, height - 4, position)
+          visibility = if(panel == :projects, do: :focused, else: :visible)
 
           table do
             list
             |> Enum.drop(offset)
             |> Enum.with_index(offset)
             |> Enum.map(fn {%{name: name}, index} ->
-              table_row(if(index == position, do: @style_selected, else: [])) do
+              table_row(if(index == position, do: Colors.selected(visibility), else: [])) do
                 table_cell(content: name)
               end
             end)

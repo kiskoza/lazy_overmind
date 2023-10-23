@@ -9,6 +9,7 @@ defmodule LazyOvermind.App do
   @impl true
   def init(%{window: window} = _context) do
     %{
+      panel: :projects,
       projects: %{
         list: [
           %{

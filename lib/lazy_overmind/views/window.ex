@@ -11,7 +11,7 @@ defmodule LazyOvermind.Views.Window do
         end
         column(size: 9) do
           project_list
-          |> Enum.filter(fn %{active: active} = _project -> active end)
+          |> Enum.filter(fn %{visibility: visibility} = _project -> visibility != :hidden end)
           |> Enum.map(fn project -> StatusPanel.render(project, model) end)
         end
       end

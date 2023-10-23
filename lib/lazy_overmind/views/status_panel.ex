@@ -1,15 +1,9 @@
 defmodule LazyOvermind.Views.StatusPanel do
   import Ratatouille.View
-  import Ratatouille.Constants, only: [color: 1]
 
-  alias LazyOvermind.Utils.Panel
+  alias LazyOvermind.Utils.{Colors, Panel}
 
-  @style_selected [
-    color: color(:black),
-    background: color(:white)
-  ]
-
-  def render(%{status: status, size: %{height: height} = _size} = _project, _model) do
+  def render(%{status: status, size: %{height: height} = _size, visibility: visibility} = _project, _model) do
     panel title: "Status",
           height: height do
       case status do
@@ -23,7 +17,7 @@ defmodule LazyOvermind.Views.StatusPanel do
             |> Enum.drop(offset)
             |> Enum.with_index(offset)
             |> Enum.map(fn {[process, _pid, status | _], index} ->
-              table_row(if(index == position, do: @style_selected, else: [])) do
+              table_row(if(index == position, do: Colors.selected(visibility), else: [])) do
                 table_cell(content: process)
                 table_cell(content: status)
               end
