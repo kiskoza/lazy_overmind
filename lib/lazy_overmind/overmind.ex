@@ -1,6 +1,7 @@
 defmodule LazyOvermind.Overmind do
   def connect(socket, process) do
-    System.cmd("xfce4-terminal", ["--execute", "fish", "-c", "overmind connect #{process} --socket #{socket}"])
+    shell = System.get_env("SHELL")
+    System.cmd("xfce4-terminal", ["--execute", shell, "-c", "overmind connect #{process} --socket #{socket}"])
     process
   end
 
