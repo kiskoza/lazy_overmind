@@ -1,4 +1,6 @@
 defmodule LazyOvermind.Utils.Config do
+  alias LazyOvermind.Models.{ProjectStatus, Project}
+
   def config_file_path do
     case System.argv()
          |> OptionParser.parse(strict: [config: :string]) do
@@ -33,12 +35,19 @@ defmodule LazyOvermind.Utils.Config do
             %{config_value |
               list: list
                     |> Enum.map(fn project ->
+                      struct(Project, project)
+                    end)
+                    |> Enum.map(fn project ->
                       case project do
-                        %{visibility: visibility} -> %{project | visibility: String.to_atom(visibility)}
-                        _ -> Map.merge(project, %{visibility: :hidden})
+                        %{visibility: visibility} when is_bitstring(visibility) -> %Project{project | visibility: String.to_atom(visibility)}
+                        _ -> %{project | visibility: :hidden}
                       end
-                    end)}
-           Map.merge(default_value, config_value)
+                    end)
+                    |> Enum.map(fn project ->
+                      %Project{project | status: %ProjectStatus{}}
+                    end)
+            }
+          Map.merge(default_value, config_value)
         end
 
       _ -> default_value

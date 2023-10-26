@@ -1,6 +1,8 @@
 defmodule LazyOvermind.Controllers.ProjectsKeyboard do
   import Ratatouille.Constants, only: [key: 1]
 
+  alias LazyOvermind.Models.Project
+
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
   @arrow_right key(:arrow_right)
@@ -24,7 +26,7 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
                    |> Enum.map(fn {project, index} ->
                      case index do
                        ^position ->
-                         %{ project |
+                         %Project{ project |
                             visibility: :focused
                           }
                        _ -> project
