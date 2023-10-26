@@ -34,18 +34,14 @@ defmodule LazyOvermind.Utils.Config do
           config_value =
             %{config_value |
               list: list
-                    |> Enum.map(fn project ->
-                      struct(Project, project)
+                    |> Enum.map(& struct(Project, &1))
+                    |> Enum.map(fn
+                      %{visibility: visibility} = project when is_bitstring(visibility) ->
+                        %Project{project | visibility: String.to_atom(visibility)}
+                      project ->
+                        %{project | visibility: :hidden}
                     end)
-                    |> Enum.map(fn project ->
-                      case project do
-                        %{visibility: visibility} when is_bitstring(visibility) -> %Project{project | visibility: String.to_atom(visibility)}
-                        _ -> %{project | visibility: :hidden}
-                      end
-                    end)
-                    |> Enum.map(fn project ->
-                      %Project{project | status: %ProjectStatus{}}
-                    end)
+                    |> Enum.map(fn project -> %Project{project | status: %ProjectStatus{}} end)
             }
           Map.merge(default_value, config_value)
         end
