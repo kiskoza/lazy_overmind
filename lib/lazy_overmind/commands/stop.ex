@@ -2,10 +2,10 @@ defmodule LazyOvermind.Commands.Stop do
   alias Ratatouille.Runtime.Command
 
   alias LazyOvermind.Overmind
-  alias LazyOvermind.Models.{ProjectStatus, Project}
+  alias LazyOvermind.Models.Project
 
-  def command(%Project{socket: socket, status: %ProjectStatus{list: list, position: position}} = _project, _model) do
-    [process | _] = Enum.at(list, position)
+  def command(%Project{socket: socket, processes: processes, processes_cursor: position} = _project, _model) do
+    [process | _] = Enum.at(processes, position)
 
     Command.new(fn ->
       {:stop, Overmind.stop(socket, process)}

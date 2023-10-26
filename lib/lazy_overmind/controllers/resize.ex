@@ -7,8 +7,8 @@ defmodule LazyOvermind.Controllers.Resize do
     %{model |
       projects: %{projects |
                   list: project_list
-                        |> Enum.map(fn %Project{size: size, status: %{list: list} = _status} = project ->
-                          %Project{project | size: %{size | height: Panel.max_height(list, %{height: height}) }}
+                        |> Enum.map(fn %Project{size: size, processes: processes} = project ->
+                          %Project{project | size: %{size | height: Panel.max_height(processes, %{height: height}) }}
                         end)
                 },
       window: %{window |

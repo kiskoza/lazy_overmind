@@ -1,5 +1,5 @@
 defmodule LazyOvermind.Utils.Config do
-  alias LazyOvermind.Models.{ProjectStatus, Project}
+  alias LazyOvermind.Models.Project
 
   def config_file_path do
     case System.argv()
@@ -41,7 +41,7 @@ defmodule LazyOvermind.Utils.Config do
                       project ->
                         %{project | visibility: :hidden}
                     end)
-                    |> Enum.map(fn project -> %Project{project | status: %ProjectStatus{}} end)
+                    |> Enum.map(fn project -> %Project{project | processes: nil, processes_cursor: 0} end)
             }
           Map.merge(default_value, config_value)
         end

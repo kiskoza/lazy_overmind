@@ -3,15 +3,15 @@ defmodule LazyOvermind.Views.StatusPanel do
 
   alias LazyOvermind.Utils.{Colors, Panel}
 
-  alias LazyOvermind.Models.{ProjectStatus, Project}
+  alias LazyOvermind.Models.Project
 
-  def render(%Project{name: name, status: status, size: %{height: height} = _size, visibility: visibility} = _project, _model) do
+  def render(%Project{name: name, size: %{height: height} = _size, visibility: visibility} = project, _model) do
     panel title: name,
           height: height do
-      case status do
-        %ProjectStatus{list: nil} ->
+      case project do
+        %{processes: nil} ->
           label(content: "Loading...")
-        %ProjectStatus{list: list, position: position} ->
+        %{processes: list, processes_cursor: position} ->
           offset = Panel.offset(list, height - 4, position)
 
           table do

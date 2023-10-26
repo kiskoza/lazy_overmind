@@ -1,18 +1,18 @@
 defmodule LazyOvermind.Controllers.Callback do
   alias LazyOvermind.Utils.Panel
 
-  alias LazyOvermind.Models.{ProjectStatus, Project}
+  alias LazyOvermind.Models.Project
 
-  def update(%{projects: %{list: project_list} = projects, window: window_size} = model, {:status, {socket, list}} = _payload) do
+  def update(%{projects: %{list: project_list} = projects, window: window_size} = model, {:status, {socket, processes}} = _payload) do
     %{model |
       projects: %{ projects |
                    list: project_list
                    |> Enum.map(fn project ->
                      case project do
-                       %Project{socket: ^socket, status: status, size: size} ->
+                       %Project{socket: ^socket, size: size} ->
                          %Project{ project |
-                            status: %ProjectStatus{ status | list: list},
-                            size: %{size | height: Panel.max_height(list, window_size)}
+                            processes: processes,
+                            size: %{size | height: Panel.max_height(processes, window_size)}
                           }
                        _ -> project
                      end

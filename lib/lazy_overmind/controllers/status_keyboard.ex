@@ -2,7 +2,7 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
   import Ratatouille.Constants, only: [key: 1]
 
   alias LazyOvermind.Commands.{Connect, Start, Stop}
-  alias LazyOvermind.Models.{ProjectStatus, Project}
+  alias LazyOvermind.Models.Project
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
@@ -14,13 +14,11 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
       projects: %{ projects |
                    list: project_list
                    |> Enum.with_index
-                   |> Enum.map(fn {%Project{status: %ProjectStatus{position: cursor_position, list: list} = status} = project, index} ->
+                   |> Enum.map(fn {%Project{processes: processes, processes_cursor: processes_cursor} = project, index} ->
                      case index do
                        ^position ->
                          %Project{ project |
-                            status: %ProjectStatus{ status |
-                                       position: new_position(cursor_position, list, key)
-                                    }
+                                   processes_cursor: new_position(processes_cursor, processes, key)
                           }
                        _ -> project
                      end
