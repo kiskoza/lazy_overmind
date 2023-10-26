@@ -5,8 +5,8 @@ defmodule LazyOvermind.Views.StatusPanel do
 
   alias LazyOvermind.Models.{ProjectStatus, Project}
 
-  def render(%Project{status: status, size: %{height: height} = _size, visibility: visibility} = _project, _model) do
-    panel title: "Status",
+  def render(%Project{name: name, status: status, size: %{height: height} = _size, visibility: visibility} = _project, _model) do
+    panel title: name,
           height: height do
       case status do
         %ProjectStatus{list: nil} ->
