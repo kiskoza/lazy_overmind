@@ -10,7 +10,12 @@ defmodule LazyOvermind.App do
   @impl true
   def init(%{window: window} = _context) do
     %{
-      panel: :projects,
+      files: %{
+        root: File.cwd() |> Kernel.then(fn {:ok, cwd} -> cwd end),
+        list: [],
+        position: 0
+      },
+      focus: :projects,
       projects: %{
         list: [],
         position: 0

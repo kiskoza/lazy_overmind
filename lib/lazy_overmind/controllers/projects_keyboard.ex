@@ -2,6 +2,7 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
   import Ratatouille.Constants, only: [key: 1]
 
   alias LazyOvermind.Models.Project
+  alias LazyOvermind.Utils.{FileBrowser, Panel}
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
@@ -11,7 +12,7 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
   when key == @arrow_up or key == @arrow_down do
     %{model |
       projects: %{ projects |
-                   position: new_position(position, list, key)
+                   position: Panel.new_position(position, list, key)
                 }
     }
   end
@@ -19,7 +20,7 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
   def update(%{projects: %{list: project_list, position: position} = projects} = model, %{key: key} = _payload)
   when key == @arrow_right do
     %{model |
-      panel: :status,
+      focus: :status,
       projects: %{ projects |
                    list: project_list
                    |> Enum.with_index
@@ -36,15 +37,21 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
     }
   end
 
-  def update(model, _payload) do
-    model
+  def update(model, %{ch: ch} = _payload)
+  when ch == ?o or ch == ?O do
+    root = File.cwd() |> Kernel.then(fn {:ok, cwd} -> cwd end)
+
+    %{model |
+      focus: :open,
+      files: %{
+        root: root,
+        list: FileBrowser.list(root),
+        position: 0
+      }
+    }
   end
 
-  defp new_position(position, list, key) do
-    case key do
-      @arrow_up -> max(0, position - 1)
-      @arrow_down -> min(Enum.count(list || []) - 1, position + 1)
-      _ -> position
-    end
+  def update(model, _payload) do
+    model
   end
 end

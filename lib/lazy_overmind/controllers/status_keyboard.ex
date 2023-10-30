@@ -3,6 +3,7 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
 
   alias LazyOvermind.Commands.{Connect, Start, Stop}
   alias LazyOvermind.Models.Project
+  alias LazyOvermind.Utils.Panel
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
@@ -18,7 +19,7 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
                      case index do
                        ^position ->
                          %Project{ project |
-                                   processes_cursor: new_position(processes_cursor, processes, key)
+                                   processes_cursor: Panel.new_position(processes_cursor, processes, key)
                           }
                        _ -> project
                      end
@@ -30,7 +31,7 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
   def update(%{projects: %{list: project_list} = projects} = model, %{key: key} = _payload)
   when key == @arrow_left do
     %{model |
-      panel: :projects,
+      focus: :projects,
       projects: %{ projects |
                    list: project_list
                    |> Enum.map(fn %Project{visibility: visibility} = project ->
@@ -60,13 +61,5 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
 
   def update(model, _payload) do
     model
-  end
-
-  defp new_position(position, list, key) do
-    case key do
-      @arrow_up -> max(0, position - 1)
-      @arrow_down -> min(Enum.count(list || []) - 1, position + 1)
-      _ -> position
-    end
   end
 end

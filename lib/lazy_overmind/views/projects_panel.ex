@@ -3,7 +3,7 @@ defmodule LazyOvermind.Views.ProjectsPanel do
 
   alias LazyOvermind.Utils.{Colors, Panel}
 
-  def render(%{window: %{height: height} = _window, projects: projects, panel: panel} = _model) do
+  def render(%{window: %{height: height} = _window, projects: projects, focus: panel} = _model) do
     panel title: "Projects",
           height: height do
       case projects do

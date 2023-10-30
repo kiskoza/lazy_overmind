@@ -1,9 +1,9 @@
 defmodule LazyOvermind.Views.Window do
   import Ratatouille.View
 
-  alias LazyOvermind.Views.{ProjectsPanel, StatusPanel}
+  alias LazyOvermind.Views.{OpenFileOverlay, ProjectsPanel, StatusPanel}
 
-  def render(%{projects: %{list: project_list} = _projects} = model) do
+  def render(%{focus: focus, projects: %{list: project_list} = _projects} = model) do
     view do
       row do
         column(size: 3) do
@@ -14,6 +14,11 @@ defmodule LazyOvermind.Views.Window do
           |> Enum.filter(fn %{visibility: visibility} = _project -> visibility != :hidden end)
           |> Enum.map(fn project -> StatusPanel.render(project, model) end)
         end
+      end
+
+      with :open <- focus do
+        OpenFileOverlay.render(model)
+      else _ -> nil
       end
     end
   end
