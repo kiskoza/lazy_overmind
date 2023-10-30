@@ -16,6 +16,7 @@ defmodule LazyOvermind.Views.ProjectsPanel do
           table do
             list
             |> Enum.drop(offset)
+            |> Enum.take(height - 4)
             |> Enum.with_index(offset)
             |> Enum.map(fn {%{name: name}, index} ->
               table_row(if(index == position, do: Colors.selected(visibility), else: [])) do
