@@ -42,6 +42,15 @@ defmodule LazyOvermind.Utils.Config do
                         %{project | visibility: :hidden}
                     end)
                     |> Enum.map(fn project -> %Project{project | processes: nil, processes_cursor: 0} end)
+                    |> Enum.map(fn %{name: name} = project ->
+                      socket = "#{name}.sock"
+
+                      with true <- File.exists?(socket) do
+                        %Project{project | socket: socket, status: :running}
+                      else
+                        _ -> %Project{project | socket: nil, status: :stopped}
+                      end
+                    end)
             }
           Map.merge(default_value, config_value)
         end

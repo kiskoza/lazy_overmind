@@ -28,4 +28,32 @@ defmodule LazyOvermind.Controllers.Callback do
   def update(model, {:stop, _process} = _payload) do
     model
   end
+
+  def update(%{projects: %{list: list} = projects} = model, {:start_procfile, {socket, procfile}} = _payload) do
+    %{ model |
+       projects: %{projects |
+                   list: list
+                         |> Enum.map(fn project ->
+                           case project do
+                             %Project{procfile: ^procfile} -> %Project{project | socket: socket, status: :running}
+                             _ -> project
+                           end
+                         end)
+                 }
+    }
+  end
+
+  def update(%{projects: %{list: list} = projects} = model, {:stop_procfile, {socket, procfile}} = _payload) do
+    %{ model |
+       projects: %{projects |
+                   list: list
+                         |> Enum.map(fn project ->
+                           case project do
+                             %Project{procfile: ^procfile} -> %Project{project | socket: nil, status: :stopped}
+                             _ -> project
+                           end
+                         end)
+                 }
+    }
+  end
 end

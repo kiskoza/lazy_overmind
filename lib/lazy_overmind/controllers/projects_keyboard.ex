@@ -3,10 +3,12 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
 
   alias LazyOvermind.Models.Project
   alias LazyOvermind.Utils.{FileBrowser, Panel}
+  alias LazyOvermind.Commands.{StartProcfile, StopProcfile}
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
   @arrow_right key(:arrow_right)
+  @space key(:space)
 
   def update(%{projects: %{list: list, position: position} = projects} = model, %{key: key} = _payload)
   when key == @arrow_up or key == @arrow_down do
@@ -49,6 +51,15 @@ defmodule LazyOvermind.Controllers.ProjectsKeyboard do
         position: 0
       }
     }
+  end
+
+  def update(%{projects: %{list: list, position: position} = _projects } = model, %{key: key} = _payload)
+  when key == @space do
+    case Enum.at(list, position) do
+      %{ status: :stopped } = project -> { model, StartProcfile.command(project, model)}
+      %{ status: :running } = project -> { model, StopProcfile.command(project, model)}
+      _ -> model
+    end
   end
 
   def update(model, _payload) do

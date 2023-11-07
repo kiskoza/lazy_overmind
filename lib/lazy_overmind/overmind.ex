@@ -10,6 +10,16 @@ defmodule LazyOvermind.Overmind do
     process
   end
 
+  def start_procfile(socket, procfile) do
+    overmind(socket, ["start", "-D", "-f", procfile])
+    {socket, procfile}
+  end
+
+  def stop_procfile(socket, procfile) do
+    overmind(socket, ["quit"])
+    {socket, procfile}
+  end
+
   def status(socket) do
     {
       socket,

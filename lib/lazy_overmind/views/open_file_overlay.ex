@@ -17,7 +17,10 @@ defmodule LazyOvermind.Views.OpenFileOverlay do
             |> Enum.take(height - 4)
             |> Enum.with_index(offset)
             |> Enum.map(fn {file, index} ->
-              tree_node([content: file] ++ (if position == index, do: Colors.selected(:focused), else: []))
+              tree_node(
+                [content: file] ++
+                Colors.selected(position == index, :focused)
+              )
             end)
           end
         end

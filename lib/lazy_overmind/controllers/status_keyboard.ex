@@ -56,7 +56,10 @@ defmodule LazyOvermind.Controllers.StatusKeyboard do
 
   def update(%{projects: %{list: list, position: position} = _projects } = model, %{ch: ch} = _payload)
   when ch == ?s or ch == ?S do
-    {model, Start.command(Enum.at(list, position), model)}
+    case Enum.at(list, position) do
+      nil -> model
+      project -> {model, Start.command(project, model)}
+    end
   end
 
   def update(model, _payload) do

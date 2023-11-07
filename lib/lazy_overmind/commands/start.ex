@@ -2,7 +2,7 @@ defmodule LazyOvermind.Commands.Start do
   alias Ratatouille.Runtime.Command
 
   alias LazyOvermind.Overmind
-    alias LazyOvermind.Models.Project
+  alias LazyOvermind.Models.Project
 
   def command(%Project{socket: socket, processes: processes, processes_cursor: position} = _project, _model) do
     [process | _] = Enum.at(processes, position)
