@@ -27,7 +27,7 @@ defmodule LazyOvermind.Utils.Panel do
     cond do
       position <= height_2 -> 0
       count - position > height - height_2 -> position - height_2
-      true -> count - height
+      true -> max(0, count - height)
     end
   end
 end
